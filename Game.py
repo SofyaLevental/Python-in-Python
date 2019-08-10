@@ -1,4 +1,6 @@
 import random
+import tkinter
+from tkinter import messagebox
 
 import pygame
 
@@ -18,6 +20,7 @@ class Cell:
 
     def __hash__(self):
         return hash((self.i, self.j))
+
 
 class Point:
     def __init__(self, x, y):
@@ -41,6 +44,7 @@ class Vector:
 
     def __hash__(self):
         return hash((self.i, self.j))
+
 
 class Cube:
     def __init__(self, position, direction=Vector(0, 1), color=(255, 0, 0)):
@@ -72,10 +76,13 @@ class Cube:
 
 class Snake:
 
-    def __init__(self, color, position):
+    def __init__(self, position, color=(255, 0, 0)):
+        self.reset(position)
+        self.color = color
+
+    def reset(self, position):
         self.body = []
         self.turns = {}
-        self.color = color
         self.position = position
         self.head = Cube(position)
         self.body.append(self.head)
@@ -150,13 +157,24 @@ class Snake:
         self.turns[self.head.position] = self.direction
 
 
+def message_box(subject, content):
+    root = tkinter.Tk()
+    root.attributes("-topmost", True)
+    root.withdraw()
+    messagebox.showinfo(subject, content)
+    try:
+        root.destroy()
+    except:
+        pass
+
+
 def main():
     global width, cells, cell_width, window, python, food
     width = 500
     cells = 20
     cell_width = width // cells
     window = pygame.display.set_mode((width, width))
-    python = Snake((255, 0, 0), Cell(10, 10))
+    python = Snake(Cell(10, 10))
     food = create_food()
     flag = True
     clock = pygame.time.Clock()
@@ -168,6 +186,13 @@ def main():
             python.add_cube()
             food = create_food()
         redraw_window()
+
+        for index in range(len(python.body)):
+            if python.body[index].position in list(map(lambda cube: cube.position, python.body[index + 1:])):
+                print("Score: ", len(python.body))
+                message_box("You Lost!", "Your Score: " + str(len(python.body)))
+                python.reset(Cell(10, 10))
+                break
 
 
 def create_food():
