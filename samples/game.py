@@ -3,40 +3,13 @@ import tkinter
 from tkinter import messagebox
 import pygame
 
-from utils import Cell, Vector, Point
+from samples.objects import Cube
+from samples.utils import Cell, Vector, Point
 
 
 class Game:
     def __init__(self):
         pass
-
-
-class Cube:
-    def __init__(self, position, direction=Vector(0, 1), color=(255, 0, 0)):
-        self.position = position
-        self.direction = direction
-        self.color = color
-
-    def move(self, direction):
-        self.direction = direction
-        self.position = Cell(self.position.i + self.direction.i, self.position.j + self.direction.j)
-
-    def draw(self, eyes=False):
-        i_position = self.position.i
-        j_position = self.position.j
-        rect = (i_position * cell_width + 1, j_position * cell_width + 1, cell_width - 1, cell_width - 1)
-        pygame.draw.rect(window, self.color, rect)
-        if eyes:
-            half_cell_width = cell_width // 2
-            cube_center = Point(
-                i_position * cell_width + 1 + half_cell_width,
-                j_position * cell_width + 1 + half_cell_width
-            )
-            radius = 3
-            left_eye_middle = Point(cube_center.x - 6, cube_center.y)
-            right_eye_middle = Point(cube_center.x + 6, cube_center.y)
-            pygame.draw.circle(window, (0, 0, 0), (left_eye_middle.x, left_eye_middle.y), radius)
-            pygame.draw.circle(window, (0, 0, 0), (right_eye_middle.x, right_eye_middle.y), radius)
 
 
 class Snake:
@@ -109,9 +82,9 @@ class Snake:
     def draw(self):
         for index, cube in enumerate(self.body):
             if index == 0:
-                cube.draw(True)
+                cube.draw(cell_width, draw_rect, draw_circle, True)
             else:
-                cube.draw()
+                cube.draw(cell_width, draw_rect)
 
     def remove_tail_from_turns(self, index, position):
         if index == len(self.body) - 1:
@@ -167,9 +140,17 @@ def create_food():
 def redraw_window():
     window.fill((0, 0, 0))
     python.draw()
-    food.draw()
+    food.draw(cell_width, draw_rect)
     draw_grid()
     pygame.display.update()
+
+
+def draw_rect(rect, color):
+    pygame.draw.rect(window, color, rect)
+
+
+def draw_circle(eye_middle, radius):
+    pygame.draw.circle(window, (0, 0, 0), (eye_middle.x, eye_middle.y), radius)
 
 
 def draw_grid():
