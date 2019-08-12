@@ -26,7 +26,7 @@ class TestCubeMethods(unittest.TestCase):
         self.assertEqual(self.cube.position, Cell(9, 10))
         self.assertEqual(self.cube.direction, new_direction)
 
-    def test_draw_body_cube(self):
+    def test_draw_cube(self):
         mocked_draw_rect = Mock()
 
         self.cube.draw(self.cell_width, mocked_draw_rect)
