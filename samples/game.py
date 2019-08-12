@@ -1,10 +1,11 @@
 import random
 import tkinter
 from tkinter import messagebox
+
 import pygame
 
 from samples.objects import Cube
-from samples.utils import Cell, Vector, Point
+from samples.utils import Cell, Vector, GREEN, BLACK, WHITE, RED
 
 
 class Game:
@@ -14,8 +15,13 @@ class Game:
 
 class Snake:
 
-    def __init__(self, position, color=(255, 0, 0)):
-        self.reset(position)
+    def __init__(self, position, color=RED):
+        self.body = []
+        self.turns = {}
+        self.position = position
+        self.head = Cube(position)
+        self.body.append(self.head)
+        self.direction = Vector(1, 0)
         self.color = color
 
     def reset(self, position):
@@ -111,7 +117,7 @@ def main():
     width = 500
     cells = 20
     cell_width = width // cells
-    window = pygame.display.set_mode((width, width))
+    window = pygame.display.set_mode((width + 1, width + 1))
     python = Snake(Cell(10, 10))
     food = create_food()
     flag = True
@@ -134,7 +140,7 @@ def main():
 
 
 def create_food():
-    return Cube(create_random_food_position(), color=(0, 255, 0))
+    return Cube(create_random_food_position(), color=GREEN)
 
 
 def redraw_window():
@@ -150,17 +156,17 @@ def draw_rect(rect, color):
 
 
 def draw_circle(eye_middle, radius):
-    pygame.draw.circle(window, (0, 0, 0), (eye_middle.x, eye_middle.y), radius)
+    pygame.draw.circle(window, BLACK, (eye_middle.x, eye_middle.y), radius)
 
 
 def draw_grid():
     x = 0
     y = 0
-    for i in range(cells):
+    for i in range(cells + 1):
+        pygame.draw.line(window, WHITE, (0, y), (width, y))
+        pygame.draw.line(window, WHITE, (x, 0), (x, width))
         x = x + cell_width
         y = y + cell_width
-        pygame.draw.line(window, (255, 255, 255), (0, y), (width, y))
-        pygame.draw.line(window, (255, 255, 255), (x, 0), (x, width))
 
 
 def create_random_food_position():

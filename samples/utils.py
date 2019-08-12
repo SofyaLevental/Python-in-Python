@@ -1,3 +1,9 @@
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+
 class Cell:
     def __init__(self, i, j):
         self.i = i

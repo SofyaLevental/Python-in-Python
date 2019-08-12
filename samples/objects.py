@@ -1,8 +1,8 @@
-from samples.utils import Vector, Cell, Point
+from samples.utils import Vector, Cell, Point, RED
 
 
 class Cube:
-    def __init__(self, position, direction=Vector(0, 1), color=(255, 0, 0)):
+    def __init__(self, position, direction=Vector(0, 1), color=RED):
         self.position = position
         self.direction = direction
         self.color = color
@@ -15,15 +15,20 @@ class Cube:
         i_position = self.position.i
         j_position = self.position.j
         rect = (i_position * cell_width + 1, j_position * cell_width + 1, cell_width - 1, cell_width - 1)
-        draw_rect(rect, self.color)
-        if eyes:
+
+        def draw_eyes():
             half_cell_width = cell_width // 2
             cube_center = Point(
                 i_position * cell_width + 1 + half_cell_width,
                 j_position * cell_width + 1 + half_cell_width
             )
-            radius = 3
-            left_eye_middle = Point(cube_center.x - 6, cube_center.y)
-            right_eye_middle = Point(cube_center.x + 6, cube_center.y)
+            radius = cell_width // 7
+            shift = cell_width // 4
+            left_eye_middle = Point(cube_center.x - shift, cube_center.y)
+            right_eye_middle = Point(cube_center.x + shift, cube_center.y)
             draw_circle(left_eye_middle, radius)
             draw_circle(right_eye_middle, radius)
+
+        draw_rect(rect, self.color)
+        if eyes:
+            draw_eyes()

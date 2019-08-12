@@ -1,14 +1,19 @@
 import unittest
-
 from unittest.mock import Mock
 
 from samples.objects import Cube
-from samples.utils import Cell, Vector
+from samples.utils import Cell, Vector, RED, Point
 
 
 class TestCubeMethods(unittest.TestCase):
     position = Cell(10, 10)
-    cell_width = 20
+    cell_width = 25
+    rect = (
+        position.i * cell_width + 1,
+        position.j * cell_width + 1,
+        cell_width - 1,
+        cell_width - 1
+    )
 
     def setUp(self):
         self.cube = Cube(self.position)
@@ -21,18 +26,29 @@ class TestCubeMethods(unittest.TestCase):
         self.assertEqual(self.cube.position, Cell(9, 10))
         self.assertEqual(self.cube.direction, new_direction)
 
-    def test_draw(self):
+    def test_draw_body_cube(self):
         mocked_draw_rect = Mock()
-        rect = (
-            self.position.i * self.cell_width + 1,
-            self.position.j * self.cell_width + 1,
-            self.cell_width - 1,
-            self.cell_width - 1
-        )
 
         self.cube.draw(self.cell_width, mocked_draw_rect)
 
-        mocked_draw_rect.assert_called_with(rect, (255, 0, 0))
+        mocked_draw_rect.assert_called_with(self.rect, RED)
+
+    def test_draw_head_cube(self):
+        mocked_draw_rect = Mock()
+        mocked_draw_circle = Mock()
+
+        radius = 3
+        shift = 6
+        cube_center_coordinate = 263
+        left_eye_middle = Point(cube_center_coordinate - shift, cube_center_coordinate)
+        right_eye_middle = Point(cube_center_coordinate + shift, cube_center_coordinate)
+
+        self.cube.draw(self.cell_width, mocked_draw_rect, mocked_draw_circle, True)
+
+        mocked_draw_rect.assert_called_with(self.rect, RED)
+        self.assertEqual(mocked_draw_circle.call_count, 2)
+        mocked_draw_circle.assert_any_call(left_eye_middle, radius)
+        mocked_draw_circle.assert_any_call(right_eye_middle, radius)
 
 
 if __name__ == '__main__':
