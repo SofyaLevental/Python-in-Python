@@ -2,7 +2,7 @@ from samples.utils import Vector, Cell, Point, RED
 
 
 class Cube:
-    def __init__(self, position, direction=Vector(0, 1), color=RED):
+    def __init__(self, position, direction=Vector(1, 0), color=RED):
         self.position = position
         self.direction = direction
         self.color = color
@@ -49,7 +49,6 @@ class Snake:
         self.body = []
         self.position = position
         self.body.append(Cube(self.position))
-        self.direction = Vector(1, 0)
         self.color = color
 
     def reset(self, position):
@@ -68,5 +67,4 @@ class Snake:
                 cube.draw(cell_width, draw_rect)
 
     def update_direction(self, direction):
-        self.direction = direction
-        self.body[0].direction = self.direction
+        self.body[0].direction = direction
