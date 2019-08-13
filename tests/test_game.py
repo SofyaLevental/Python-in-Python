@@ -1,14 +1,15 @@
 import unittest
 from unittest.mock import Mock
 
-from samples.objects import Cube
+from samples.objects import Cube, Snake
 from samples.utils import Cell, Vector, RED, Point
+
+cells = 20
 
 
 class TestCubeMethods(unittest.TestCase):
     position = Cell(10, 10)
     cell_width = 25
-    cells = 20
     rect = (
         position.i * cell_width + 1,
         position.j * cell_width + 1,
@@ -22,7 +23,7 @@ class TestCubeMethods(unittest.TestCase):
     def test_move(self):
         new_direction = Vector(-1, 0)
 
-        self.cube.move(self.cells, new_direction)
+        self.cube.move(cells, new_direction)
 
         self.assertEqual(self.cube.position, Cell(9, 10))
         self.assertEqual(self.cube.direction, new_direction)
@@ -31,7 +32,7 @@ class TestCubeMethods(unittest.TestCase):
         self.cube = Cube(Cell(0, 10))
         new_direction = Vector(-1, 0)
 
-        self.cube.move(self.cells, new_direction)
+        self.cube.move(cells, new_direction)
 
         self.assertEqual(self.cube.position, Cell(19, 10))
         self.assertEqual(self.cube.direction, new_direction)
@@ -62,8 +63,22 @@ class TestCubeMethods(unittest.TestCase):
 
 
 class TestSnakeMethods(unittest.TestCase):
+    def setUp(self):
+        self.snake = Snake(Cell(10, 10))
+
     def test_update_direction(self):
-        pass
+        new_direction = Vector(-1, 0)
+        self.snake.update_direction(new_direction)
+
+        self.assertEqual(self.snake.body[0].direction, new_direction)
+
+    def test_move(self):
+        new_head = Cube(Cell(11, 10), Vector(1, 0))
+
+        self.snake.move(cells)
+
+        self.assertEqual(len(self.snake.body), 2)
+        self.assertEqual(self.snake.body[0], new_head)
 
 
 if __name__ == '__main__':

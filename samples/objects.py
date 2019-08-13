@@ -43,6 +43,11 @@ class Cube:
         draw_circle(left_eye_middle, radius)
         draw_circle(right_eye_middle, radius)
 
+    def __eq__(self, cube):
+        return self.position == cube.position and self.direction == cube.direction and self.color == cube.color
+
+    def __hash__(self):
+        return hash((self.position, self.direction, self.color))
 
 class Snake:
     def __init__(self, position, color=RED):
