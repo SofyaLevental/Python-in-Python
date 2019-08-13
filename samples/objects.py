@@ -74,20 +74,10 @@ class Snake:
     def create_new_tail_cube(self, i_grid_position, j_grid_position):
         self.body.append(Cube(Cell(i_grid_position, j_grid_position), self.body[-1].direction))
 
-    def move(self, cells, listen_to_keyboard_events):
-        first_cell = 0
-        last_cell = cells - 1
-
-        listen_to_keyboard_events()
-
-        for index, cube in enumerate(self.body):
-            position = cube.position
-            if position in self.turns:
-                turn = self.turns[position]
-                cube.move(cells, turn)
-                self.remove_tail_from_turns(index, position)
-            else:
-                cube.move(cells, cube.direction)
+    def move(self, cells):
+        new_head = Cube(self.body[0].position, self.body[0].direction)
+        new_head.move(cells, new_head.direction)
+        self.body.insert(0, new_head)
 
     def draw(self, cell_width, draw_rect, draw_circle):
         for index, cube in enumerate(self.body):
@@ -102,4 +92,5 @@ class Snake:
 
     def update_direction(self, direction):
         self.direction = direction
+        self.body[0].direction = self.direction
         self.turns[self.head.position] = self.direction

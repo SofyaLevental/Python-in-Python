@@ -37,10 +37,13 @@ def main():
     while flag:
         pygame.time.delay(50)
         clock.tick(6)
-        python.move(cells, publisher.listen_to_keyboard_events)
+        publisher.listen_to_keyboard_events()
+        python.move(cells)
         if python.body[0].position.i == food.position.i and python.body[0].position.j == food.position.j:
-            python.add_cube()
+            #python.add_cube()
             food = create_food()
+        else:
+            del python.body[-1]
         redraw_window()
 
         for index in range(len(python.body)):
