@@ -2,7 +2,7 @@ import random
 import tkinter
 from tkinter import messagebox
 
-import paho.mqtt.client as mqtt
+import paho.mqtt.client
 import pygame
 
 from samples.keys_publisher import Publisher
@@ -52,7 +52,7 @@ def main():
 
 
 def subscribe_for_keys():
-    client = mqtt.Client("keysSub")
+    client = paho.mqtt.client.Client("keysSub")
     client.on_message = on_message
     client.connect("localhost")
     client.loop_start()

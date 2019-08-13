@@ -7,9 +7,23 @@ class Cube:
         self.direction = direction
         self.color = color
 
-    def move(self, direction):
+    def move(self, cells, direction):
+        first_cell = 0
+        last_cell = cells - 1
+
         self.direction = direction
-        self.position = Cell(self.position.i + self.direction.i, self.position.j + self.direction.j)
+
+        if self.direction.i == -1 and self.position.i == first_cell:
+            self.position = Cell(last_cell, self.position.j)
+        elif self.direction.i == 1 and self.position.i == last_cell:
+            self.position = Cell(first_cell, self.position.j)
+        elif self.direction.j == -1 and self.position.j == first_cell:
+            self.position = Cell(self.position.i, last_cell)
+        elif self.direction.j == 1 and self.position.j == last_cell:
+            self.position = Cell(self.position.i, first_cell)
+        else:
+            self.position = Cell(self.position.i + self.direction.i, self.position.j + self.direction.j)
+
 
     def draw(self, cell_width, draw_rect, draw_circle=None, eyes=False):
         i_position = self.position.i
@@ -78,19 +92,10 @@ class Snake:
             position = cube.position
             if position in self.turns:
                 turn = self.turns[position]
-                cube.move(turn)
+                cube.move(cells, turn)
                 self.remove_tail_from_turns(index, position)
             else:
-                if cube.direction.i == -1 and cube.position.i == first_cell:
-                    cube.position = Cell(last_cell, cube.position.j)
-                elif cube.direction.i == 1 and cube.position.i == last_cell:
-                    cube.position = Cell(first_cell, cube.position.j)
-                elif cube.direction.j == -1 and cube.position.j == first_cell:
-                    cube.position = Cell(cube.position.i, last_cell)
-                elif cube.direction.j == 1 and cube.position.j == last_cell:
-                    cube.position = Cell(cube.position.i, first_cell)
-                else:
-                    cube.move(cube.direction)
+                cube.move(cells, cube.direction)
 
     def draw(self, cell_width, draw_rect, draw_circle):
         for index, cube in enumerate(self.body):
