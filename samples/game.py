@@ -40,7 +40,6 @@ def main():
         publisher.listen_to_keyboard_events()
         python.move(cells)
         if python.body[0].position.i == food.position.i and python.body[0].position.j == food.position.j:
-            #python.add_cube()
             food = create_food()
         else:
             del python.body[-1]
