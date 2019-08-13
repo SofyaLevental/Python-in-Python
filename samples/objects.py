@@ -8,22 +8,14 @@ class Cube:
         self.color = color
 
     def move(self, cells, direction):
-        first_cell = 0
-        last_cell = cells - 1
+        def modulus_cells(number):
+            return number % cells
 
         self.direction = direction
-
-        if self.direction.i == -1 and self.position.i == first_cell:
-            self.position = Cell(last_cell, self.position.j)
-        elif self.direction.i == 1 and self.position.i == last_cell:
-            self.position = Cell(first_cell, self.position.j)
-        elif self.direction.j == -1 and self.position.j == first_cell:
-            self.position = Cell(self.position.i, last_cell)
-        elif self.direction.j == 1 and self.position.j == last_cell:
-            self.position = Cell(self.position.i, first_cell)
-        else:
-            self.position = Cell(self.position.i + self.direction.i, self.position.j + self.direction.j)
-
+        self.position = Cell(
+            modulus_cells(self.position.i + self.direction.i),
+            modulus_cells(self.position.j + self.direction.j)
+        )
 
     def draw(self, cell_width, draw_rect, draw_circle=None, eyes=False):
         i_position = self.position.i

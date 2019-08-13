@@ -8,6 +8,7 @@ from samples.utils import Cell, Vector, RED, Point
 class TestCubeMethods(unittest.TestCase):
     position = Cell(10, 10)
     cell_width = 25
+    cells = 20
     rect = (
         position.i * cell_width + 1,
         position.j * cell_width + 1,
@@ -21,9 +22,18 @@ class TestCubeMethods(unittest.TestCase):
     def test_move(self):
         new_direction = Vector(-1, 0)
 
-        self.cube.move(new_direction)
+        self.cube.move(self.cells, new_direction)
 
         self.assertEqual(self.cube.position, Cell(9, 10))
+        self.assertEqual(self.cube.direction, new_direction)
+
+    def test_move_through_boarder(self):
+        self.cube = Cube(Cell(0, 10))
+        new_direction = Vector(-1, 0)
+
+        self.cube.move(self.cells, new_direction)
+
+        self.assertEqual(self.cube.position, Cell(19, 10))
         self.assertEqual(self.cube.direction, new_direction)
 
     def test_draw_cube(self):
