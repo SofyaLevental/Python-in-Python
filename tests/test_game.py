@@ -51,5 +51,10 @@ class TestCubeMethods(unittest.TestCase):
         mocked_draw_circle.assert_any_call(right_eye_middle, radius)
 
 
+class TestSnakeMethods(unittest.TestCase):
+    def test_update_direction(self):
+        pass
+
+
 if __name__ == '__main__':
     unittest.main()

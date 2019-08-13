@@ -2,10 +2,12 @@ import random
 import tkinter
 from tkinter import messagebox
 
+import paho.mqtt.client as mqtt
 import pygame
 
+from samples.keys_publisher import Publisher
 from samples.objects import Cube, Snake
-from samples.utils import Cell, Vector, GREEN, BLACK, WHITE, RED
+from samples.utils import Cell, Vector, GREEN, BLACK, WHITE
 
 
 def message_box(subject, content):
@@ -29,10 +31,13 @@ def main():
     food = create_food()
     flag = True
     clock = pygame.time.Clock()
+    publisher = Publisher()
+    subscribe_for_keys()
+
     while flag:
         pygame.time.delay(50)
-        clock.tick(10)
-        python.move(cells, change_direction_with_key)
+        clock.tick(6)
+        python.move(cells, publisher.listen_to_keyboard_events)
         if python.body[0].position.i == food.position.i and python.body[0].position.j == food.position.j:
             python.add_cube()
             food = create_food()
@@ -46,25 +51,28 @@ def main():
                 break
 
 
+def subscribe_for_keys():
+    client = mqtt.Client("keysSub")
+    client.on_message = on_message
+    client.connect("localhost")
+    client.loop_start()
+    client.subscribe("keys")
+
+
+def on_message(client, userdata, message):
+    key = str(message.payload.decode("utf-8"))
+    if key == 'L':
+        python.update_direction(Vector(-1, 0))
+    elif key == 'R':
+        python.update_direction(Vector(1, 0))
+    elif key == 'U':
+        python.update_direction(Vector(0, -1))
+    elif key == 'D':
+        python.update_direction(Vector(0, 1))
+
+
 def create_food():
     return Cube(create_random_food_position(), color=GREEN)
-
-
-def change_direction_with_key(update_direction):
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-
-        keys = pygame.key.get_pressed()
-        for key in keys:
-            if keys[pygame.K_LEFT]:
-                update_direction(Vector(-1, 0))
-            elif keys[pygame.K_RIGHT]:
-                update_direction(Vector(1, 0))
-            elif keys[pygame.K_UP]:
-                update_direction(Vector(0, -1))
-            elif keys[pygame.K_DOWN]:
-                update_direction(Vector(0, 1))
 
 
 def redraw_window():

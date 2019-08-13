@@ -68,11 +68,11 @@ class Snake:
     def create_new_tail_cube(self, i_grid_position, j_grid_position):
         self.body.append(Cube(Cell(i_grid_position, j_grid_position), self.body[-1].direction))
 
-    def move(self, cells, change_direction_with_key):
+    def move(self, cells, listen_to_keyboard_events):
         first_cell = 0
         last_cell = cells - 1
 
-        change_direction_with_key(self.update_direction)
+        listen_to_keyboard_events()
 
         for index, cube in enumerate(self.body):
             position = cube.position
