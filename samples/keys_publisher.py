@@ -9,7 +9,7 @@ class Publisher:
         pass
 
     def send_key(self, key):
-        publish.single(self.topic, key)
+        publish.single(self.topic, key, hostname="Marocchino")
 
     def listen_to_keyboard_events(self):
         for event in pygame.event.get():
