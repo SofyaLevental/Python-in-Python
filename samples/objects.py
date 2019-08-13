@@ -8,53 +8,52 @@ class Cube:
         self.color = color
 
     def move(self, cells, direction):
-        def modulus_cells(number):
-            return number % cells
-
         self.direction = direction
         self.position = Cell(
-            modulus_cells(self.position.i + self.direction.i),
-            modulus_cells(self.position.j + self.direction.j)
+            self.__modulus_cells(self.position.i + self.direction.i, cells),
+            self.__modulus_cells(self.position.j + self.direction.j, cells)
         )
 
     def draw(self, cell_width, draw_rect, draw_circle=None, eyes=False):
-        i_position = self.position.i
-        j_position = self.position.j
-        rect = (i_position * cell_width + 1, j_position * cell_width + 1, cell_width - 1, cell_width - 1)
-
-        def draw_eyes():
-            half_cell_width = cell_width // 2
-            cube_center = Point(
-                i_position * cell_width + 1 + half_cell_width,
-                j_position * cell_width + 1 + half_cell_width
-            )
-            radius = cell_width // 7
-            shift = cell_width // 4
-            left_eye_middle = Point(cube_center.x - shift, cube_center.y)
-            right_eye_middle = Point(cube_center.x + shift, cube_center.y)
-            draw_circle(left_eye_middle, radius)
-            draw_circle(right_eye_middle, radius)
+        rect = (
+            self.position.i * cell_width + 1,
+            self.position.j * cell_width + 1,
+            cell_width - 1,
+            cell_width - 1
+        )
 
         draw_rect(rect, self.color)
         if eyes:
-            draw_eyes()
+            self.__draw_eyes(cell_width, draw_circle)
+
+    @staticmethod
+    def __modulus_cells(number, cells):
+        return number % cells
+
+    def __draw_eyes(self, cell_width, draw_circle):
+        half_cell_width = cell_width // 2
+        cube_center = Point(
+            self.position.i * cell_width + 1 + half_cell_width,
+            self.position.j * cell_width + 1 + half_cell_width
+        )
+        radius = cell_width // 7
+        shift = cell_width // 4
+        left_eye_middle = Point(cube_center.x - shift, cube_center.y)
+        right_eye_middle = Point(cube_center.x + shift, cube_center.y)
+        draw_circle(left_eye_middle, radius)
+        draw_circle(right_eye_middle, radius)
 
 
 class Snake:
     def __init__(self, position, color=RED):
         self.body = []
         self.position = position
-        self.head = Cube(position)
-        self.body.append(self.head)
+        self.body.append(Cube(self.position))
         self.direction = Vector(1, 0)
         self.color = color
 
     def reset(self, position):
-        self.body = []
-        self.position = position
-        self.head = Cube(position)
-        self.body.append(self.head)
-        self.direction = Vector(1, 0)
+        self.__init__(position)
 
     def move(self, cells):
         new_head = Cube(self.body[0].position, self.body[0].direction)
