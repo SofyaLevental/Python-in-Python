@@ -1,4 +1,6 @@
-from samples.utils import Vector, Cell, Point, RED
+import random
+
+from samples.utils import Vector, Cell, Point, RED, GREEN
 
 
 class Cube:
@@ -82,6 +84,9 @@ class Snake:
         head.direction = direction
         self.set_head(head)
 
+    def create_food(self, cells):
+        return Cube(self.__create_random_food_position(cells), color=GREEN)
+
     def get_body(self):
         return self.__body
 
@@ -93,3 +98,13 @@ class Snake:
 
     def set_head(self, head):
         self.__body[0] = head
+
+    def __create_random_food_position(self, cells):
+        while True:
+            new_food_position = Cell(random.randrange(cells), random.randrange(cells))
+            if len(list(filter(lambda cube: cube.is_on_food(new_food_position), self.get_body()))) > 0:
+                continue
+            else:
+                break
+
+        return new_food_position
