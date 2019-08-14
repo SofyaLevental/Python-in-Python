@@ -39,16 +39,17 @@ def main():
         clock.tick(6)
         publisher.listen_to_keyboard_events()
         python.move(cells)
-        if python.body[0].position.i == food.position.i and python.body[0].position.j == food.position.j:
+        if python.get_head().position.i == food.position.i and python.get_head().position.j == food.position.j:
             food = create_food()
         else:
-            del python.body[-1]
+            body = python.get_body()
+            del body[-1]
+            python.set_body(body)
         redraw_window()
 
-        for index in range(len(python.body)):
-            if python.body[index].position in list(map(lambda cube: cube.position, python.body[index + 1:])):
-                print("Score: ", len(python.body))
-                message_box("You Lost!", "Your Score: " + str(len(python.body)))
+        for index in range(len(python.get_body())):
+            if python.get_body()[index].position in list(map(lambda cube: cube.position, python.get_body()[index + 1:])):
+                message_box("You Lost!", "Your Score: " + str(len(python.get_body())))
                 python.reset(Cell(10, 10))
                 break
 
@@ -103,7 +104,7 @@ def draw_grid():
 
 
 def create_random_food_position():
-    snake_body_cubes = python.body
+    snake_body_cubes = python.get_body()
 
     while True:
         i_food_position = random.randrange(cells)

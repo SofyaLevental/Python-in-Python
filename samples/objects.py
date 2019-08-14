@@ -49,27 +49,44 @@ class Cube:
     def __hash__(self):
         return hash((self.position, self.direction, self.color))
 
+
 class Snake:
     def __init__(self, position, color=RED):
-        self.body = []
+        self.__body = []
         self.position = position
-        self.body.append(Cube(self.position))
+        self.__body.append(Cube(self.position))
         self.color = color
 
     def reset(self, position):
         self.__init__(position)
 
     def move(self, cells):
-        new_head = Cube(self.body[0].position, self.body[0].direction)
+        new_head = Cube(self.get_head().position, self.get_head().direction)
         new_head.move(cells, new_head.direction)
-        self.body.insert(0, new_head)
+        body = self.get_body()
+        body.insert(0, new_head)
+        self.set_body(body)
 
     def draw(self, cell_width, draw_rect, draw_circle):
-        for index, cube in enumerate(self.body):
+        for index, cube in enumerate(self.get_body()):
             if index == 0:
                 cube.draw(cell_width, draw_rect, draw_circle, True)
             else:
                 cube.draw(cell_width, draw_rect)
 
     def update_direction(self, direction):
-        self.body[0].direction = direction
+        head = self.get_head()
+        head.direction = direction
+        self.set_head(head)
+
+    def get_body(self):
+        return self.__body
+
+    def set_body(self, body):
+        self.__body = body
+
+    def get_head(self):
+        return self.get_body()[0]
+
+    def set_head(self, head):
+        self.__body[0] = head

@@ -5,11 +5,11 @@ from samples.objects import Cube, Snake
 from samples.utils import Cell, Vector, RED, Point
 
 cells = 20
+cell_width = 25
 
 
 class TestCubeMethods(unittest.TestCase):
     position = Cell(10, 10)
-    cell_width = 25
     rect = (
         position.i * cell_width + 1,
         position.j * cell_width + 1,
@@ -40,7 +40,7 @@ class TestCubeMethods(unittest.TestCase):
     def test_draw_cube(self):
         mocked_draw_rect = Mock()
 
-        self.cube.draw(self.cell_width, mocked_draw_rect)
+        self.cube.draw(cell_width, mocked_draw_rect)
 
         mocked_draw_rect.assert_called_with(self.rect, RED)
 
@@ -54,7 +54,7 @@ class TestCubeMethods(unittest.TestCase):
         left_eye_middle = Point(cube_center_coordinate - shift, cube_center_coordinate)
         right_eye_middle = Point(cube_center_coordinate + shift, cube_center_coordinate)
 
-        self.cube.draw(self.cell_width, mocked_draw_rect, mocked_draw_circle, True)
+        self.cube.draw(cell_width, mocked_draw_rect, mocked_draw_circle, True)
 
         mocked_draw_rect.assert_called_with(self.rect, RED)
         self.assertEqual(mocked_draw_circle.call_count, 2)
@@ -70,15 +70,29 @@ class TestSnakeMethods(unittest.TestCase):
         new_direction = Vector(-1, 0)
         self.snake.update_direction(new_direction)
 
-        self.assertEqual(self.snake.body[0].direction, new_direction)
+        self.assertEqual(self.snake.get_head().direction, new_direction)
 
     def test_move(self):
         new_head = Cube(Cell(11, 10), Vector(1, 0))
 
         self.snake.move(cells)
 
-        self.assertEqual(len(self.snake.body), 2)
-        self.assertEqual(self.snake.body[0], new_head)
+        self.assertEqual(len(self.snake.get_body()), 2)
+        self.assertEqual(self.snake.get_head(), new_head)
+
+    def test_draw(self):
+        mocked_draw_rect = Mock()
+        mocked_draw_circle = Mock()
+        mocked_head = Mock()
+
+        def get_body():
+            return [mocked_head]
+
+        self.snake.get_body = get_body
+
+        self.snake.draw(cell_width, mocked_draw_rect, mocked_draw_circle)
+
+        mocked_head.draw.assert_called_with(cell_width, mocked_draw_rect, mocked_draw_circle, True)
 
 
 if __name__ == '__main__':
