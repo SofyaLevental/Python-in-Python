@@ -5,8 +5,8 @@ from tkinter import messagebox
 import paho.mqtt.client
 import pygame
 
-from samples.keys_publisher import Publisher
 from samples.objects import Cube, Snake
+from samples.publisher import Publisher
 from samples.utils import Cell, Vector, GREEN, BLACK, WHITE
 
 
@@ -65,13 +65,16 @@ def subscribe_for_keys():
 
 def on_message(client, userdata, message):
     key = str(message.payload.decode("utf-8"))
-    switcher = {
-        'L': Vector(-1, 0),
-        'R': Vector(1, 0),
-        'U': Vector(0, -1),
-        'D': Vector(0, 1)
-    }
-    python.update_direction(switcher.get(key))
+    if key == 'Q':
+        pygame.quit()
+    else:
+        switcher = {
+            'L': Vector(-1, 0),
+            'R': Vector(1, 0),
+            'U': Vector(0, -1),
+            'D': Vector(0, 1)
+        }
+        python.update_direction(switcher.get(key))
 
 
 def create_food():
