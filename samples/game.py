@@ -48,7 +48,8 @@ def main():
         redraw_window()
 
         for index in range(len(python.get_body())):
-            if python.get_body()[index].position in list(map(lambda cube: cube.position, python.get_body()[index + 1:])):
+            if python.get_body()[index].position in list(
+                    map(lambda cube: cube.position, python.get_body()[index + 1:])):
                 message_box("You Lost!", "Your Score: " + str(len(python.get_body())))
                 python.reset(Cell(10, 10))
                 break
@@ -104,23 +105,14 @@ def draw_grid():
 
 
 def create_random_food_position():
-    snake_body_cubes = python.get_body()
-
     while True:
-        i_food_position = random.randrange(cells)
-        j_food_position = random.randrange(cells)
-        if len(list(
-                filter(lambda cube: is_food_on_body_cube(cube, i_food_position, j_food_position),
-                       snake_body_cubes))) > 0:
+        new_food_position = Cell(random.randrange(cells), random.randrange(cells))
+        if len(list(filter(lambda cube: cube.is_on_food(new_food_position), python.get_body()))) > 0:
             continue
         else:
             break
 
-    return Cell(i_food_position, j_food_position)
-
-
-def is_food_on_body_cube(cube, i_food_position, j_food_position):
-    return cube.position.i == i_food_position and cube.position.j == j_food_position
+    return new_food_position
 
 
 main()

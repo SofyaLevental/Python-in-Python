@@ -26,6 +26,9 @@ class Cube:
         if eyes:
             self.__draw_eyes(cell_width, draw_circle)
 
+    def is_on_food(self, food_position):
+        return self.position == food_position
+
     @staticmethod
     def __modulus_cells(number, cells):
         return number % cells

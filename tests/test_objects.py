@@ -61,6 +61,16 @@ class TestCubeMethods(unittest.TestCase):
         mocked_draw_circle.assert_any_call(left_eye_middle, radius)
         mocked_draw_circle.assert_any_call(right_eye_middle, radius)
 
+    def test_is_on_food_when_on_food(self):
+        is_on_food = self.cube.is_on_food(Cell(10, 10))
+
+        self.assertTrue(is_on_food)
+
+    def test_is_on_food_when_not_on_food(self):
+        is_on_food = self.cube.is_on_food(Cell(9, 10))
+
+        self.assertFalse(is_on_food)
+
 
 class TestSnakeMethods(unittest.TestCase):
     def setUp(self):
