@@ -2,11 +2,11 @@ import random
 import tkinter
 from tkinter import messagebox
 
-import paho.mqtt.client
 import pygame
 
 from samples.objects import Cube, Snake
 from samples.publisher import Publisher
+from samples.subscriber import Subscriber
 from samples.utils import Cell, Vector, GREEN, BLACK, WHITE
 
 
@@ -32,7 +32,7 @@ def main():
     flag = True
     clock = pygame.time.Clock()
     publisher = Publisher()
-    subscribe_for_keys()
+    Subscriber().subscribe_for_commands(on_message)
 
     while flag:
         pygame.time.delay(50)
@@ -53,14 +53,6 @@ def main():
                 message_box("You Lost!", "Your Score: " + str(len(python.get_body())))
                 python.reset(Cell(10, 10))
                 break
-
-
-def subscribe_for_keys():
-    client = paho.mqtt.client.Client("keysSub")
-    client.on_message = on_message
-    client.connect("localhost")
-    client.loop_start()
-    client.subscribe("keys")
 
 
 def on_message(client, userdata, message):

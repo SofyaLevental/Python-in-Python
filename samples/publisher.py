@@ -3,13 +3,13 @@ import pygame
 
 
 class Publisher:
-    topic = "keys"
+    topic = "commands"
 
     def __init__(self):
         pass
 
     def send_key(self, key):
-        publish.single(self.topic, key, hostname="Marocchino")
+        publish.single(self.topic, key, hostname="Marocchino", client_id="commandsPub")
 
     def listen_to_keyboard_events(self):
         for event in pygame.event.get():
