@@ -6,6 +6,7 @@ from samples.visualization import Window, Popup, Timer
 
 python = Snake(Cell(10, 10))
 
+
 def main():
     cells = 20
     food = python.create_food(cells)
@@ -17,20 +18,15 @@ def main():
         timer.delay()
         Publisher.listen_to_keyboard_events()
         python.move(cells)
-        if python.get_head().position.i == food.position.i and python.get_head().position.j == food.position.j:
-            food = python.create_food(cells)
+        if python.has_collision():
+            Popup.show("You Lost!", "Your Score is: " + python.get_score())
+            python.reset(Cell(10, 10))
         else:
-            body = python.get_body()
-            del body[-1]
-            python.set_body(body)
-        window.redraw_window(python, food)
-
-        for index in range(len(python.get_body())):
-            if python.get_body()[index].position in list(
-                    map(lambda cube: cube.position, python.get_body()[index + 1:])):
-                Popup.show("You Lost!", "Your Score: " + str(len(python.get_body())))
-                python.reset(Cell(10, 10))
-                break
+            if python.get_head().is_on_cube(food.position):
+                food = python.create_food(cells)
+            else:
+                python.remove_tail()
+            window.redraw_window(python, food)
 
 
 def on_message(client, userdata, message):

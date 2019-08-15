@@ -31,6 +31,7 @@ class Window:
         self.cells = cells
         self.cell_width = self.width // self.cells
         self.window = pygame.display.set_mode((width + 1, width + 1))
+        pygame.display.set_caption("Python Game")
 
     @staticmethod
     def quit_game():

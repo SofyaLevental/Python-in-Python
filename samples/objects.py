@@ -28,8 +28,8 @@ class Cube:
         if eyes:
             self.__draw_eyes(cell_width, draw_circle)
 
-    def is_on_food(self, food_position):
-        return self.position == food_position
+    def is_on_cube(self, cube_position):
+        return self.position == cube_position
 
     @staticmethod
     def __modulus_cells(number, cells):
@@ -87,6 +87,15 @@ class Snake:
     def create_food(self, cells):
         return Cube(self.__create_random_food_position(cells), color=GREEN)
 
+    def remove_tail(self):
+        del self.__body[-1]
+
+    def has_collision(self):
+        return len(list(filter(lambda cube: self.get_head().is_on_cube(cube.position), self.get_body()))) > 1
+
+    def get_score(self):
+        return str(len(self.get_body())-2)
+
     def get_body(self):
         return self.__body
 
@@ -102,7 +111,7 @@ class Snake:
     def __create_random_food_position(self, cells):
         while True:
             new_food_position = Cell(random.randrange(cells), random.randrange(cells))
-            if len(list(filter(lambda cube: cube.is_on_food(new_food_position), self.get_body()))) > 0:
+            if len(list(filter(lambda cube: cube.is_on_cube(new_food_position), self.get_body()))) > 0:
                 continue
             else:
                 break

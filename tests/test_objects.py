@@ -62,12 +62,12 @@ class TestCubeMethods(unittest.TestCase):
         mocked_draw_circle.assert_any_call(right_eye_middle, radius)
 
     def test_is_on_food_when_on_food(self):
-        is_on_food = self.cube.is_on_food(Cell(10, 10))
+        is_on_food = self.cube.is_on_cube(Cell(10, 10))
 
         self.assertTrue(is_on_food)
 
     def test_is_on_food_when_not_on_food(self):
-        is_on_food = self.cube.is_on_food(Cell(9, 10))
+        is_on_food = self.cube.is_on_cube(Cell(9, 10))
 
         self.assertFalse(is_on_food)
 
@@ -103,6 +103,24 @@ class TestSnakeMethods(unittest.TestCase):
         self.snake.draw(cell_width, mocked_draw_rect, mocked_draw_circle)
 
         mocked_head.draw.assert_called_with(cell_width, mocked_draw_rect, mocked_draw_circle, True)
+
+    def test_remove_tail(self):
+        self.snake.move(cells)
+        new_head = Cube(Cell(11, 10))
+
+        self.snake.remove_tail()
+
+        self.assertEqual(len(self.snake.get_body()), 1)
+        self.assertEqual(self.snake.get_head(), new_head)
+
+    def test_has_collision(self):
+        self.snake.move(cells)
+        head = self.snake.get_head()
+        head.direction = Vector(-1, 0)
+        self.snake.set_head(head)
+        self.snake.move(cells)
+
+        self.assertTrue(self.snake.has_collision())
 
 
 if __name__ == '__main__':
