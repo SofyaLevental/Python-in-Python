@@ -4,20 +4,18 @@ from samples.subscriber import Subscriber
 from samples.utils import Cell, Vector
 from samples.visualization import Window, Popup, Timer
 
+python = Snake(Cell(10, 10))
 
 def main():
-    global python
     cells = 20
-    python = Snake(Cell(10, 10))
     food = python.create_food(cells)
     timer = Timer()
-    publisher = Publisher()
-    Subscriber().subscribe_for_commands(on_message)
+    Subscriber.subscribe_for_commands(on_message)
     window = Window(500, cells)
 
     while True:
         timer.delay()
-        publisher.listen_to_keyboard_events()
+        Publisher.listen_to_keyboard_events()
         python.move(cells)
         if python.get_head().position.i == food.position.i and python.get_head().position.j == food.position.j:
             food = python.create_food(cells)
