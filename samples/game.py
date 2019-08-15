@@ -2,7 +2,7 @@ from samples.objects import Snake
 from samples.publisher import Publisher
 from samples.subscriber import Subscriber
 from samples.utils import Cell, Vector
-from samples.visualization import Window, Popup, Timer
+from samples.visualization import Window, Timer
 
 python = Snake(Cell(10, 10))
 
@@ -15,11 +15,12 @@ def main():
     window = Window(500, cells)
 
     while True:
-        timer.delay()
+        timer.delay(50)
         Publisher.listen_to_keyboard_events()
         python.move(cells)
         if python.has_collision():
-            Popup.show("You Lost!", "Your Score is: " + python.get_score())
+            window.show_message("You Lost!", "Your Score is: " + python.get_score())
+            timer.delay(1200)
             python.reset(Cell(10, 10))
         else:
             if python.get_head().is_on_cube(food.position):
