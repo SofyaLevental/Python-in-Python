@@ -10,11 +10,12 @@ class Cube:
         self.__color = color
 
     def move(self, cells, direction):
-        self.__direction = direction
-        self.__position = Cell(
-            self.__modulus_cells(self.get_position().get_i() + self.__direction.get_i(), cells),
-            self.__modulus_cells(self.get_position().get_j() + self.__direction.get_j(), cells)
+        self.set_direction(direction)
+        position = Cell(
+            self.__modulus_cells(self.get_position().get_i() + self.get_direction().get_i(), cells),
+            self.__modulus_cells(self.get_position().get_j() + self.get_direction().get_j(), cells)
         )
+        self.set_position(position)
 
     def draw(self, cell_width, draw_rect, draw_circle=None, eyes=False):
         rect = (
@@ -24,7 +25,7 @@ class Cube:
             cell_width - 1
         )
 
-        draw_rect(rect, self.__color)
+        draw_rect(rect, self.get_color())
         if eyes:
             self.__draw_eyes(cell_width, draw_circle)
 
@@ -33,6 +34,9 @@ class Cube:
 
     def get_position(self):
         return self.__position
+
+    def set_position(self, position):
+        self.__position = position
 
     def get_direction(self):
         return self.__direction
@@ -68,11 +72,9 @@ class Cube:
 
 
 class Snake:
-    def __init__(self, position, color=RED):
+    def __init__(self, position):
         self.__body = []
-        self.__position = position
-        self.__body.append(Cube(self.__position))
-        self.__color = color
+        self.__body.append(Cube(position))
 
     def reset(self, position):
         self.__init__(position)
