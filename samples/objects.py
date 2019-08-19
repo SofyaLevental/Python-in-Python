@@ -55,8 +55,8 @@ class Cube:
         )
         radius = cell_width // 7
         shift = cell_width // 4
-        left_eye_middle = Point(cube_center.x - shift, cube_center.y)
-        right_eye_middle = Point(cube_center.x + shift, cube_center.y)
+        left_eye_middle = Point(cube_center.get_x() - shift, cube_center.get_y())
+        right_eye_middle = Point(cube_center.get_x() + shift, cube_center.get_y())
         draw_circle(left_eye_middle, radius)
         draw_circle(right_eye_middle, radius)
 

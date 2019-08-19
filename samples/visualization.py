@@ -49,7 +49,7 @@ class Window:
         pygame.draw.rect(self.window, color, rect)
 
     def __draw_circle(self, eye_middle, radius):
-        pygame.draw.circle(self.window, BLACK, (eye_middle.x, eye_middle.y), radius)
+        pygame.draw.circle(self.window, BLACK, (eye_middle.get_x(), eye_middle.get_y()), radius)
 
     def __draw_grid(self):
         x = 0

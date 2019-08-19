@@ -18,14 +18,20 @@ class Cell:
 
 class Point:
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
+        self.__x = x
+        self.__y = y
+
+    def get_x(self):
+        return self.__x
+
+    def get_y(self):
+        return self.__y
 
     def __eq__(self, point):
-        return self.x == point.x and self.y == point.y
+        return self.__x == point.get_x() and self.__y == point.get_y()
 
     def __hash__(self):
-        return hash((self.x, self.y))
+        return hash((self.__x, self.__y))
 
 
 class Vector:
