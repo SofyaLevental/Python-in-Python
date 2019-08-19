@@ -26,7 +26,7 @@ class TestCubeMethods(unittest.TestCase):
         self.cube.move(cells, new_direction)
 
         self.assertEqual(self.cube.get_position(), Cell(9, 10))
-        self.assertEqual(self.cube.direction, new_direction)
+        self.assertEqual(self.cube.get_direction(), new_direction)
 
     def test_move_through_boarder(self):
         self.cube = Cube(Cell(0, 10))
@@ -35,7 +35,7 @@ class TestCubeMethods(unittest.TestCase):
         self.cube.move(cells, new_direction)
 
         self.assertEqual(self.cube.get_position(), Cell(19, 10))
-        self.assertEqual(self.cube.direction, new_direction)
+        self.assertEqual(self.cube.get_direction(), new_direction)
 
     def test_draw_cube(self):
         mocked_draw_rect = Mock()
@@ -80,7 +80,7 @@ class TestSnakeMethods(unittest.TestCase):
         new_direction = Vector(-1, 0)
         self.snake.update_direction(new_direction)
 
-        self.assertEqual(self.snake.get_head().direction, new_direction)
+        self.assertEqual(self.snake.get_head().get_direction(), new_direction)
 
     def test_move(self):
         new_head = Cube(Cell(11, 10), Vector(1, 0))
@@ -116,7 +116,7 @@ class TestSnakeMethods(unittest.TestCase):
     def test_has_collision(self):
         self.snake.move(cells)
         head = self.snake.get_head()
-        head.direction = Vector(-1, 0)
+        head.set_direction(Vector(-1, 0))
         self.snake.set_head(head)
         self.snake.move(cells)
 

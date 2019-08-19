@@ -6,14 +6,14 @@ from samples.utils import Vector, Cell, Point, RED, GREEN
 class Cube:
     def __init__(self, position, direction=Vector(1, 0), color=RED):
         self.__position = position
-        self.direction = direction
+        self.__direction = direction
         self.color = color
 
     def move(self, cells, direction):
-        self.direction = direction
+        self.__direction = direction
         self.__position = Cell(
-            self.__modulus_cells(self.__position.i + self.direction.i, cells),
-            self.__modulus_cells(self.__position.j + self.direction.j, cells)
+            self.__modulus_cells(self.__position.i + self.__direction.i, cells),
+            self.__modulus_cells(self.__position.j + self.__direction.j, cells)
         )
 
     def draw(self, cell_width, draw_rect, draw_circle=None, eyes=False):
@@ -34,6 +34,12 @@ class Cube:
     def get_position(self):
         return self.__position
 
+    def get_direction(self):
+        return self.__direction
+
+    def set_direction(self, direction):
+        self.__direction = direction
+
     @staticmethod
     def __modulus_cells(number, cells):
         return number % cells
@@ -52,10 +58,10 @@ class Cube:
         draw_circle(right_eye_middle, radius)
 
     def __eq__(self, cube):
-        return self.__position == cube.get_position() and self.direction == cube.direction and self.color == cube.color
+        return self.__position == cube.get_position() and self.__direction == cube.get_direction() and self.color == cube.color
 
     def __hash__(self):
-        return hash((self.__position, self.direction, self.color))
+        return hash((self.__position, self.__direction, self.color))
 
 
 class Snake:
@@ -69,8 +75,8 @@ class Snake:
         self.__init__(position)
 
     def move(self, cells):
-        new_head = Cube(self.get_head().get_position(), self.get_head().direction)
-        new_head.move(cells, new_head.direction)
+        new_head = Cube(self.get_head().get_position(), self.get_head().get_direction())
+        new_head.move(cells, new_head.get_direction())
         body = self.get_body()
         body.insert(0, new_head)
         self.set_body(body)
@@ -84,7 +90,7 @@ class Snake:
 
     def update_direction(self, direction):
         head = self.get_head()
-        head.direction = direction
+        head.set_direction(direction)
         self.set_head(head)
 
     def create_food(self, cells):
