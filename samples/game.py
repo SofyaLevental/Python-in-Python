@@ -23,7 +23,7 @@ def main():
             timer.delay(1200)
             python.reset(Cell(10, 10))
         else:
-            if python.get_head().is_on_cube(food.position):
+            if python.get_head().is_on_cube(food.get_position()):
                 food = python.create_food(cells)
             else:
                 python.remove_tail()

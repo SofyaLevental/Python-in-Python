@@ -25,7 +25,7 @@ class TestCubeMethods(unittest.TestCase):
 
         self.cube.move(cells, new_direction)
 
-        self.assertEqual(self.cube.position, Cell(9, 10))
+        self.assertEqual(self.cube.get_position(), Cell(9, 10))
         self.assertEqual(self.cube.direction, new_direction)
 
     def test_move_through_boarder(self):
@@ -34,7 +34,7 @@ class TestCubeMethods(unittest.TestCase):
 
         self.cube.move(cells, new_direction)
 
-        self.assertEqual(self.cube.position, Cell(19, 10))
+        self.assertEqual(self.cube.get_position(), Cell(19, 10))
         self.assertEqual(self.cube.direction, new_direction)
 
     def test_draw_cube(self):

@@ -5,21 +5,21 @@ from samples.utils import Vector, Cell, Point, RED, GREEN
 
 class Cube:
     def __init__(self, position, direction=Vector(1, 0), color=RED):
-        self.position = position
+        self.__position = position
         self.direction = direction
         self.color = color
 
     def move(self, cells, direction):
         self.direction = direction
-        self.position = Cell(
-            self.__modulus_cells(self.position.i + self.direction.i, cells),
-            self.__modulus_cells(self.position.j + self.direction.j, cells)
+        self.__position = Cell(
+            self.__modulus_cells(self.__position.i + self.direction.i, cells),
+            self.__modulus_cells(self.__position.j + self.direction.j, cells)
         )
 
     def draw(self, cell_width, draw_rect, draw_circle=None, eyes=False):
         rect = (
-            self.position.i * cell_width + 1,
-            self.position.j * cell_width + 1,
+            self.__position.i * cell_width + 1,
+            self.__position.j * cell_width + 1,
             cell_width - 1,
             cell_width - 1
         )
@@ -29,7 +29,10 @@ class Cube:
             self.__draw_eyes(cell_width, draw_circle)
 
     def is_on_cube(self, cube_position):
-        return self.position == cube_position
+        return self.__position == cube_position
+
+    def get_position(self):
+        return self.__position
 
     @staticmethod
     def __modulus_cells(number, cells):
@@ -38,8 +41,8 @@ class Cube:
     def __draw_eyes(self, cell_width, draw_circle):
         half_cell_width = cell_width // 2
         cube_center = Point(
-            self.position.i * cell_width + 1 + half_cell_width,
-            self.position.j * cell_width + 1 + half_cell_width
+            self.__position.i * cell_width + 1 + half_cell_width,
+            self.__position.j * cell_width + 1 + half_cell_width
         )
         radius = cell_width // 7
         shift = cell_width // 4
@@ -49,10 +52,10 @@ class Cube:
         draw_circle(right_eye_middle, radius)
 
     def __eq__(self, cube):
-        return self.position == cube.position and self.direction == cube.direction and self.color == cube.color
+        return self.__position == cube.get_position() and self.direction == cube.direction and self.color == cube.color
 
     def __hash__(self):
-        return hash((self.position, self.direction, self.color))
+        return hash((self.__position, self.direction, self.color))
 
 
 class Snake:
@@ -66,7 +69,7 @@ class Snake:
         self.__init__(position)
 
     def move(self, cells):
-        new_head = Cube(self.get_head().position, self.get_head().direction)
+        new_head = Cube(self.get_head().get_position(), self.get_head().direction)
         new_head.move(cells, new_head.direction)
         body = self.get_body()
         body.insert(0, new_head)
@@ -91,7 +94,7 @@ class Snake:
         del self.__body[-1]
 
     def has_collision(self):
-        return len(list(filter(lambda cube: self.get_head().is_on_cube(cube.position), self.get_body()))) > 1
+        return len(list(filter(lambda cube: self.get_head().is_on_cube(cube.get_position()), self.get_body()))) > 1
 
     def get_score(self):
         return str(len(self.get_body())-2)
