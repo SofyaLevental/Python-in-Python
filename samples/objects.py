@@ -7,7 +7,7 @@ class Cube:
     def __init__(self, position, direction=Vector(1, 0), color=RED):
         self.__position = position
         self.__direction = direction
-        self.color = color
+        self.__color = color
 
     def move(self, cells, direction):
         self.__direction = direction
@@ -24,7 +24,7 @@ class Cube:
             cell_width - 1
         )
 
-        draw_rect(rect, self.color)
+        draw_rect(rect, self.__color)
         if eyes:
             self.__draw_eyes(cell_width, draw_circle)
 
@@ -39,6 +39,9 @@ class Cube:
 
     def set_direction(self, direction):
         self.__direction = direction
+
+    def get_color(self):
+        return self.__color
 
     @staticmethod
     def __modulus_cells(number, cells):
@@ -58,10 +61,10 @@ class Cube:
         draw_circle(right_eye_middle, radius)
 
     def __eq__(self, cube):
-        return self.__position == cube.get_position() and self.__direction == cube.get_direction() and self.color == cube.color
+        return self.__position == cube.get_position() and self.__direction == cube.get_direction() and self.__color == cube.get_color()
 
     def __hash__(self):
-        return hash((self.__position, self.__direction, self.color))
+        return hash((self.__position, self.__direction, self.__color))
 
 
 class Snake:
