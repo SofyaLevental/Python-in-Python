@@ -70,9 +70,9 @@ class Cube:
 class Snake:
     def __init__(self, position, color=RED):
         self.__body = []
-        self.position = position
-        self.__body.append(Cube(self.position))
-        self.color = color
+        self.__position = position
+        self.__body.append(Cube(self.__position))
+        self.__color = color
 
     def reset(self, position):
         self.__init__(position)
