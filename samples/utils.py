@@ -6,14 +6,20 @@ BLACK = (0, 0, 0)
 
 class Cell:
     def __init__(self, i, j):
-        self.i = i
-        self.j = j
+        self.__i = i
+        self.__j = j
+
+    def get_i(self):
+        return self.__i
+
+    def get_j(self):
+        return self.__j
 
     def __eq__(self, cell):
-        return self.i == cell.i and self.j == cell.j
+        return self.__i == cell.get_i() and self.__j == cell.get_j()
 
     def __hash__(self):
-        return hash((self.i, self.j))
+        return hash((self.__i, self.__j))
 
 
 class Point:

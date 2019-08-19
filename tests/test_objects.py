@@ -11,8 +11,8 @@ cell_width = 25
 class TestCubeMethods(unittest.TestCase):
     position = Cell(10, 10)
     rect = (
-        position.i * cell_width + 1,
-        position.j * cell_width + 1,
+        position.get_i() * cell_width + 1,
+        position.get_j() * cell_width + 1,
         cell_width - 1,
         cell_width - 1
     )

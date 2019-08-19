@@ -12,14 +12,14 @@ class Cube:
     def move(self, cells, direction):
         self.__direction = direction
         self.__position = Cell(
-            self.__modulus_cells(self.__position.i + self.__direction.get_i(), cells),
-            self.__modulus_cells(self.__position.j + self.__direction.get_j(), cells)
+            self.__modulus_cells(self.get_position().get_i() + self.__direction.get_i(), cells),
+            self.__modulus_cells(self.get_position().get_j() + self.__direction.get_j(), cells)
         )
 
     def draw(self, cell_width, draw_rect, draw_circle=None, eyes=False):
         rect = (
-            self.__position.i * cell_width + 1,
-            self.__position.j * cell_width + 1,
+            self.get_position().get_i() * cell_width + 1,
+            self.get_position().get_j() * cell_width + 1,
             cell_width - 1,
             cell_width - 1
         )
@@ -50,8 +50,8 @@ class Cube:
     def __draw_eyes(self, cell_width, draw_circle):
         half_cell_width = cell_width // 2
         cube_center = Point(
-            self.__position.i * cell_width + 1 + half_cell_width,
-            self.__position.j * cell_width + 1 + half_cell_width
+            self.get_position().get_i() * cell_width + 1 + half_cell_width,
+            self.get_position().get_j() * cell_width + 1 + half_cell_width
         )
         radius = cell_width // 7
         shift = cell_width // 4
@@ -61,10 +61,10 @@ class Cube:
         draw_circle(right_eye_middle, radius)
 
     def __eq__(self, cube):
-        return self.__position == cube.get_position() and self.__direction == cube.get_direction() and self.__color == cube.get_color()
+        return self.get_position() == cube.get_position() and self.get_direction() == cube.get_direction() and self.get_color() == cube.get_color()
 
     def __hash__(self):
-        return hash((self.__position, self.__direction, self.__color))
+        return hash((self.get_position(), self.get_direction(), self.get_color()))
 
 
 class Snake:
