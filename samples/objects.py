@@ -12,8 +12,8 @@ class Cube:
     def move(self, cells, direction):
         self.__direction = direction
         self.__position = Cell(
-            self.__modulus_cells(self.__position.i + self.__direction.i, cells),
-            self.__modulus_cells(self.__position.j + self.__direction.j, cells)
+            self.__modulus_cells(self.__position.i + self.__direction.get_i(), cells),
+            self.__modulus_cells(self.__position.j + self.__direction.get_j(), cells)
         )
 
     def draw(self, cell_width, draw_rect, draw_circle=None, eyes=False):

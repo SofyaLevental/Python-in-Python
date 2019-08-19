@@ -36,11 +36,17 @@ class Point:
 
 class Vector:
     def __init__(self, i, j):
-        self.i = i
-        self.j = j
+        self.__i = i
+        self.__j = j
+
+    def get_i(self):
+        return self.__i
+
+    def get_j(self):
+        return self.__j
 
     def __eq__(self, vector):
-        return self.i == vector.i and self.j == vector.j
+        return self.__i == vector.get_i() and self.__j == vector.get_j()
 
     def __hash__(self):
-        return hash((self.i, self.j))
+        return hash((self.__i, self.__j))
