@@ -32,33 +32,33 @@ class Window:
         self.__blit_text(font, content, self.width / 2 + self.cell_width)
         pygame.display.update()
 
+    def redraw_window(self, python, food):
+        self.window.fill(BLACK)
+        python.draw(self.cell_width, self.__draw_rect, self.__draw_circle)
+        food.draw(self.cell_width, self.__draw_rect)
+        self.__draw_grid()
+        pygame.display.update()
+
     def __blit_text(self, font, text, j_position):
         rended_text = font.render(text, True, WHITE, BLACK)
         rended_text_rect = rended_text.get_rect()
         rended_text_rect.center = (self.width / 2, j_position)
         self.window.blit(rended_text, rended_text_rect)
 
-    def redraw_window(self, python, food):
-        self.window.fill(BLACK)
-        python.draw(self.cell_width, self.draw_rect, self.draw_circle)
-        food.draw(self.cell_width, self.draw_rect)
-        self.draw_grid()
-        pygame.display.update()
-
-    def draw_rect(self, rect, color):
+    def __draw_rect(self, rect, color):
         pygame.draw.rect(self.window, color, rect)
 
-    def draw_circle(self, eye_middle, radius):
+    def __draw_circle(self, eye_middle, radius):
         pygame.draw.circle(self.window, BLACK, (eye_middle.x, eye_middle.y), radius)
 
-    def draw_grid(self):
+    def __draw_grid(self):
         x = 0
         y = 0
         for i in range(self.cells + 1):
-            self.draw_line((0, y), (self.width, y))
-            self.draw_line((x, 0), (x, self.width))
+            self.__draw_line((0, y), (self.width, y))
+            self.__draw_line((x, 0), (x, self.width))
             x = x + self.cell_width
             y = y + self.cell_width
 
-    def draw_line(self, begin, end):
+    def __draw_line(self, begin, end):
         pygame.draw.line(self.window, WHITE, begin, end)
