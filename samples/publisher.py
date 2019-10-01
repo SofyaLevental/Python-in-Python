@@ -1,14 +1,13 @@
 import paho.mqtt.publish as publish
 import pygame
 
+from samples.utils import HOSTNAME
+
 
 class Publisher:
-    def __init__(self):
-        pass
-
     @staticmethod
     def __send_key(key):
-        publish.single("commands", key, hostname="Marocchino", client_id="commandsPub")
+        publish.single("commands", key, hostname=HOSTNAME, client_id="commandsPub")
 
     @staticmethod
     def listen_to_keyboard_events():
