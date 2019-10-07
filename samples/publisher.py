@@ -6,10 +6,6 @@ from samples.utils import HOSTNAME
 
 class Publisher:
     @staticmethod
-    def __send_key(key):
-        publish.single("commands", key, hostname=HOSTNAME, client_id="commandsPub")
-
-    @staticmethod
     def listen_to_keyboard_events():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -24,3 +20,7 @@ class Publisher:
                 Publisher.__send_key('U')
             if keys[pygame.K_DOWN]:
                 Publisher.__send_key('D')
+
+    @staticmethod
+    def __send_key(key):
+        publish.single("commands", key, hostname=HOSTNAME, client_id="commandsPub")

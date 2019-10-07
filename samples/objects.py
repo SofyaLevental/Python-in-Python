@@ -57,15 +57,17 @@ class Cube:
             self.get_position().get_i() * cell_width + 1 + half_cell_width,
             self.get_position().get_j() * cell_width + 1 + half_cell_width
         )
-        radius = cell_width // 7
-        shift = cell_width // 4
-        left_eye_middle = Point(cube_center.get_x() - shift, cube_center.get_y())
-        right_eye_middle = Point(cube_center.get_x() + shift, cube_center.get_y())
-        draw_circle(left_eye_middle, radius)
-        draw_circle(right_eye_middle, radius)
+        eye_radius = cell_width // 7
+        eye_shift = cell_width // 4
+        left_eye_middle = Point(cube_center.get_x() - eye_shift, cube_center.get_y())
+        right_eye_middle = Point(cube_center.get_x() + eye_shift, cube_center.get_y())
+        draw_circle(left_eye_middle, eye_radius)
+        draw_circle(right_eye_middle, eye_radius)
 
     def __eq__(self, cube):
-        return self.get_position() == cube.get_position() and self.get_direction() == cube.get_direction() and self.get_color() == cube.get_color()
+        return self.get_position() == cube.get_position() \
+               and self.get_direction() == cube.get_direction() \
+               and self.get_color() == cube.get_color()
 
     def __hash__(self):
         return hash((self.get_position(), self.get_direction(), self.get_color()))
@@ -105,7 +107,7 @@ class Snake:
         del self.__body[-1]
 
     def has_collision(self):
-        return len(list(filter(lambda cube: self.get_head().is_on_cube(cube.get_position()), self.get_body()))) > 1
+        return self.__get_number_of_cells_with_position_in_body(self.get_head().get_position()) > 1
 
     def get_score(self):
         return str(len(self.get_body())-2)
@@ -125,9 +127,12 @@ class Snake:
     def __create_random_food_position(self, cells):
         while True:
             new_food_position = Cell(random.randrange(cells), random.randrange(cells))
-            if len(list(filter(lambda cube: cube.is_on_cube(new_food_position), self.get_body()))) > 0:
+            if self.__get_number_of_cells_with_position_in_body(new_food_position) > 0:
                 continue
             else:
                 break
 
         return new_food_position
+
+    def __get_number_of_cells_with_position_in_body(self, position):
+        return len(list(filter(lambda cube: cube.is_on_cube(position), self.get_body())))
