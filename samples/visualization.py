@@ -13,16 +13,19 @@ class Timer:
 
 
 class Window:
-    def __init__(self, width, cells):
-        self.width = width
-        self.cells = cells
-        self.cell_width = self.width // self.cells
+    __in_game = False
+
+    def __init__(self, cell_width, number_of_cells):
+        self.cell_width = cell_width
+        self.number_of_cells = number_of_cells
+        self.width = self.cell_width * self.number_of_cells
         pygame.init()
-        self.window = pygame.display.set_mode((width + 1, width + 1))
+        self.__in_game = True
+        self.window = pygame.display.set_mode((self.width + 1, self.width + 1))
         pygame.display.set_caption("Python Game")
 
-    @staticmethod
-    def quit_game():
+    def quit_game(self):
+        self.__in_game = False
         pygame.quit()
         quit()
 
@@ -39,6 +42,9 @@ class Window:
         self.__draw_grid()
         pygame.display.update()
 
+    def is_in_game(self):
+        return self.__in_game
+
     def __blit_text(self, font, text, j_position):
         rended_text = font.render(text, True, WHITE, BLACK)
         rended_text_rect = rended_text.get_rect()
@@ -54,7 +60,7 @@ class Window:
     def __draw_grid(self):
         x = 0
         y = 0
-        for i in range(self.cells + 1):
+        for i in range(self.number_of_cells + 1):
             self.__draw_line((0, y), (self.width, y))
             self.__draw_line((x, 0), (x, self.width))
             x = x + self.cell_width
