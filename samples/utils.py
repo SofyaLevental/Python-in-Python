@@ -23,6 +23,9 @@ class Cell:
         return hash((self.__i, self.__j))
 
 
+START_CELL = Cell(10, 10)
+
+
 class Point:
     def __init__(self, x, y):
         self.__x = x

@@ -2,23 +2,22 @@ import unittest
 from unittest.mock import Mock
 
 from samples.objects import Cube, Snake
-from samples.utils import Cell, Vector, RED, Point
+from samples.utils import Cell, Vector, RED, Point, START_CELL
 
 cells = 20
 cell_width = 25
 
 
 class TestCubeMethods(unittest.TestCase):
-    position = Cell(10, 10)
     rect = (
-        position.get_i() * cell_width + 1,
-        position.get_j() * cell_width + 1,
+        START_CELL.get_i() * cell_width + 1,
+        START_CELL.get_j() * cell_width + 1,
         cell_width - 1,
         cell_width - 1
     )
 
     def setUp(self):
-        self.cube = Cube(self.position)
+        self.cube = Cube(START_CELL)
 
     def test_move(self):
         new_direction = Vector(-1, 0)
@@ -74,7 +73,7 @@ class TestCubeMethods(unittest.TestCase):
 
 class TestSnakeMethods(unittest.TestCase):
     def setUp(self):
-        self.snake = Snake(Cell(10, 10))
+        self.snake = Snake(START_CELL)
 
     def test_update_direction(self):
         new_direction = Vector(-1, 0)
